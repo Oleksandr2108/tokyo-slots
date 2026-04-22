@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <>
       <div
-        className="absolute bottom-[12%] left-0 right-0 z-0 bg-cover bg-center bg-no-repeat"
+        className="absolute bottom-31 left-0 right-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `url(${City})`,
           minHeight: "30vh",
@@ -15,7 +15,7 @@ const Footer = () => {
         className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `url(${Cloud})`,
-          minHeight: "20vh",
+          minHeight: "220px",
         }}
       />
     </>

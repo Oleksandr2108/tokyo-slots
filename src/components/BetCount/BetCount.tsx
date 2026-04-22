@@ -43,7 +43,7 @@ const BetCount = () => {
         {/* Bet Count */}
         <div className=" flex items-end w-47.5 h-15 bg-[#665D5C] rounded-2xl border-2 border-[#341d1a]">
           <div className="mb-0 w-full flex items-center justify-center h-12.5 bg-[#887c7b] rounded-2xl border-t-2 border-[#341d1a]">
-            <div className="w-6 h-6  flex items-center justify-center rounded-full bg-[#F7405E] mr-2 border-4 border-[#341d1a]">
+            <div className="w-6 h-6  flex items-center justify-center rounded-full bg-[#F7405E] mr-2 border-4 border-[#341d1a] boxShadow">
               <svg
                 width="7"
                 height="8"

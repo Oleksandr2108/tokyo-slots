@@ -26,7 +26,7 @@ const SpinButton = () => {
           <img
             src={btnAside}
             alt="btnAside"
-            className={`absolute w-50 top-13.5 left-1/2 -translate-x-1/2 z-10 transition-transform duration-150 `}
+            className={`absolute w-50 top-13.5 left-1/2 -translate-x-1/2 z-10 transition-transform duration-150 ${isPressed ? "translate-y-2" : "translate-y-0"}`}
           />
         </div>
         <img
