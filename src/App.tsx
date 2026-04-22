@@ -8,7 +8,7 @@ import SpinButton from "./components/SpinButton/SpinButton";
 
 function App() {
   return (
-    <div className="min-h-screen relative overflow-hidden pb-35">
+    <div className="min-h-screen relative overflow-hidden pb-40">
       <FloatIcon/>
       <Header />
       <Slots />

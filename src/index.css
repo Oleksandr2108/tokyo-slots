@@ -54,3 +54,8 @@ p {
  text-shadow: 0 4px  0 rgba(0, 0, 0, 0.1);
   -webkit-text-stroke: 1px #341D1A;
 }
+.strokeText {
+ 
+  
+  -webkit-text-stroke: 3px #341D1A;
+}
