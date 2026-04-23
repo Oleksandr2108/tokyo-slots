@@ -32,3 +32,25 @@
   top: calc(100% + 81px);
   left: 50%;
 }
+
+.reelIcon {
+  width: 62px;
+  height: 62px;
+  object-fit: contain;
+}
+
+.reelIconSpin {
+  animation: reelSpin 0.25s linear infinite;
+}
+
+@keyframes reelSpin {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0.15;
+  }
+
+  100% {
+    transform: translateY(100%);
+    opacity: 1;
+  }
+}

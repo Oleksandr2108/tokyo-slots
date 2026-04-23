@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import "./SunPopup.css";
 import PopapWinBg from "../../assets/popapWin.svg";
 import PopapLoseBg from "../../assets/popapLose.svg";
@@ -9,6 +10,12 @@ interface SunPopupProps {
 }
 
 function SunPopup({ isWin }: SunPopupProps) {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
   const balanceFromStore: string | number = "99 999.99";
   const { wholePart, fractionPart, separator } =
     parseBalanceParts(balanceFromStore);

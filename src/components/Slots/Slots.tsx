@@ -1,15 +1,29 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import MainImg from "../../assets/slots.png";
 import Stick from "../../assets/stick.png";
 import Ball from "../../assets/ball.png";
+import { reelIcons, useGameStore } from "../../store/useGameStore";
 
 import style from "./Slots.module.css";
-const Slots = () => {
-  const [state, setState] = useState("down");
 
-  const toggle = () => {
-    setState((prev) => (prev === "down" ? "up" : "down"));
-  };
+const iconById = Object.fromEntries(
+  reelIcons.map((icon) => [icon.id, icon.src]),
+);
+
+const Slots = () => {
+  const leverState = useGameStore((state) => state.leverState);
+  console.log("leverState", leverState);
+  const reels = useGameStore((state) => state.reels);
+  const spinning = useGameStore((state) => state.spinning);
+  const startGame = useGameStore((state) => state.startGame);
+  const stopGame = useGameStore((state) => state.stopGame);
+
+  useEffect(() => {
+    return () => {
+      stopGame();
+    };
+  }, [stopGame]);
+
   return (
     <div className="relative w-125 mx-auto mt-18">
       <img
@@ -17,18 +31,35 @@ const Slots = () => {
         alt="Slots"
         className="w-full"
       />
+      <div className="absolute top-0 left-13 h-full flex items-center justify-center pointer-events-none gap-4">
+        {reels.map((iconId, index) => (
+          
+          <div
+            key={index}
+            className="w-20 h-35 rounded-2xl border-2 border-[#341d1a] bg-white flex items-center flex-col justify-center overflow-hidden"
+          >
+            <div className="bg-[#E2E2E2] w-full h-8 flex-1 z-50" />
+            <img
+              src={iconById[iconId]}
+              alt="slot icon"
+              className={`${style.reelIcon} ${spinning[index] ? style.reelIconSpin : ""}`}
+            />
+            <div className="bg-[#E2E2E2] w-full h-8 flex-1 z-50"/>
+          </div>
+        ))}
+      </div>
       <div
         className="absolute top-[35%] right-3 translate-x-[50%] -translate-y-[50%] cursor-pointer"
-        onClick={toggle}
+        onClick={startGame}
       >
-        <div className={`${style.stick} ${style[state]}`}>
+        <div className={`${style.stick} ${style[leverState]}`}>
           {" "}
           <img
             src={Stick}
             alt="stick"
           />{" "}
         </div>
-        <div className={`${style.ball} ${style[state]}`}>
+        <div className={`${style.ball} ${style[leverState]}`}>
           <img
             src={Ball}
             alt="ball"

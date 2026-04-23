@@ -4,12 +4,11 @@ import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import Slots from "./components/Slots/Slots";
 import SpinButton from "./components/SpinButton/SpinButton";
-import SunPopup from "./components/SunPopup/SunPopup";
 
 function App() {
   return (
     <div className="min-h-screen relative overflow-hidden pb-40">
-      <SunPopup is/>
+    
       <FloatIcon />
       <Header />
       <Slots />

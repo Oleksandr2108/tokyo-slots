@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { useGameStore } from "../../store/useGameStore";
 
 const BetCount = () => {
   const [minusPressed, setMinusPressed] = useState(false);
   const [plusPressed, setPlusPressed] = useState(false);
-
+  const { betCount, increaseBet, decreaseBet } = useGameStore();
   const handlePress = (setter: (v: boolean) => void) => {
     setter(true);
     setTimeout(() => setter(false), 300);
@@ -24,7 +25,10 @@ const BetCount = () => {
             className={`w-full h-15 bg-white rounded-2xl border-2 border-[#341d1a]
             flex items-center justify-center cursor-pointer transition-transform duration-300
             ${minusPressed ? "translate-y-1 scale-95" : ""}`}
-            onClick={() => handlePress(setMinusPressed)}
+            onClick={() => {
+              handlePress(setMinusPressed);
+              decreaseBet();
+            }}
           >
             <svg
               width="9"
@@ -58,7 +62,7 @@ const BetCount = () => {
               </svg>
             </div>
             <p className="text-white text-[20px] font-bold textShadow">
-              99 999.99
+              {betCount.toFixed(2)}
             </p>
           </div>
         </div>
@@ -71,7 +75,10 @@ const BetCount = () => {
             className={`w-full h-15 bg-white rounded-2xl border-2 border-[#341d1a]
             flex items-center justify-center cursor-pointer transition-transform duration-300
             ${plusPressed ? "translate-y-1 scale-95" : ""}`}
-            onClick={() => handlePress(setPlusPressed)}
+            onClick={() => {
+              handlePress(setPlusPressed);
+              increaseBet();
+            }}
           >
             <svg
               width="15"
