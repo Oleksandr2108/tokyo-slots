@@ -4,7 +4,6 @@ import BalanceBg from "../../assets/BalanceBg.png";
 import { parseBalanceParts } from "../../utils/parseBalanceParts";
 
 const Footer = () => {
-  // Replace this with a selector from the store when balance state is connected.
   const balanceFromStore: string | number = "99 999.99";
   const { wholePart, fractionPart, separator } =
     parseBalanceParts(balanceFromStore);

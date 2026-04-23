@@ -1,0 +1,150 @@
+.sunPopup {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  overflow: hidden;
+  background: rgba(165, 223, 247, 0.9);
+}
+
+.sunPopup__content{
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: max-content;
+  height: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sunPopup__title--win{
+position: absolute;
+top: 20px;
+left: 0;
+font-weight: 400;
+font-size: 50px;
+line-height: 72%;
+text-align: center;
+color: #a5dff7;
+
+text-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
+transform: rotate(348deg);
+-webkit-text-stroke: 3px #341D1A;
+}
+.sunPopup__title--lose{
+position: absolute;
+top: 0;
+left: 20px;
+font-weight: 400;
+font-size: 50px;
+line-height: 72%;
+text-align: center;
+color: #fff;
+
+text-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
+transform: rotate(8deg);
+-webkit-text-stroke: 3px #341D1A;
+}
+.sunPopup::before {
+  content: "";
+  position: absolute;
+  inset: -35vmax;
+  margin: auto;
+  width: 80vmax;
+  height: 80vmax;
+  border-radius: 50%;
+  
+}
+
+.sunPopup__rays {
+  position: absolute;
+  inset: -80vmax;
+  margin: auto;
+  width: 170vmax;
+  height: 170vmax;
+  border-radius: 50%;
+  transform-origin: 50% 50%;
+}
+
+.sunPopup__rays--slow {
+  animation: spinSunRays 30s linear infinite;
+  opacity: 0.55;
+  background: conic-gradient(
+    from -8deg,
+    rgba(255, 255, 255, 0.42) 0deg 7deg,
+    rgba(255, 255, 255, 0) 7deg 21deg,
+    rgba(255, 255, 255, 0.32) 21deg 36deg,
+    rgba(255, 255, 255, 0) 36deg 52deg,
+    rgba(255, 255, 255, 0.4) 52deg 60deg,
+    rgba(255, 255, 255, 0) 60deg 81deg,
+    rgba(255, 255, 255, 0.34) 81deg 99deg,
+    rgba(255, 255, 255, 0) 99deg 117deg,
+    rgba(255, 255, 255, 0.38) 117deg 125deg,
+    rgba(255, 255, 255, 0) 125deg 146deg,
+    rgba(255, 255, 255, 0.3) 146deg 166deg,
+    rgba(255, 255, 255, 0) 166deg 187deg,
+    rgba(255, 255, 255, 0.42) 187deg 194deg,
+    rgba(255, 255, 255, 0) 194deg 216deg,
+    rgba(255, 255, 255, 0.33) 216deg 230deg,
+    rgba(255, 255, 255, 0) 230deg 247deg,
+    rgba(255, 255, 255, 0.4) 247deg 255deg,
+    rgba(255, 255, 255, 0) 255deg 278deg,
+    rgba(255, 255, 255, 0.29) 278deg 296deg,
+    rgba(255, 255, 255, 0) 296deg 315deg,
+    rgba(255, 255, 255, 0.41) 315deg 323deg,
+    rgba(255, 255, 255, 0) 323deg 343deg,
+    rgba(255, 255, 255, 0.35) 343deg 360deg
+  );
+}
+
+.sunPopup__rays--fast {
+  animation: spinSunRaysReverse 17s linear infinite;
+  opacity: 0.3;
+  filter: blur(2px);
+  background: conic-gradient(
+    from 14deg,
+    rgba(255, 255, 255, 0.35) 0deg 5deg,
+    rgba(255, 255, 255, 0) 5deg 18deg,
+    rgba(255, 255, 255, 0.24) 18deg 30deg,
+    rgba(255, 255, 255, 0) 30deg 46deg,
+    rgba(255, 255, 255, 0.32) 46deg 52deg,
+    rgba(255, 255, 255, 0) 52deg 72deg,
+    rgba(255, 255, 255, 0.28) 72deg 89deg,
+    rgba(255, 255, 255, 0) 89deg 106deg,
+    rgba(255, 255, 255, 0.36) 106deg 112deg,
+    rgba(255, 255, 255, 0) 112deg 135deg,
+    rgba(255, 255, 255, 0.26) 135deg 150deg,
+    rgba(255, 255, 255, 0) 150deg 172deg,
+    rgba(255, 255, 255, 0.33) 172deg 179deg,
+    rgba(255, 255, 255, 0) 179deg 199deg,
+    rgba(255, 255, 255, 0.24) 199deg 214deg,
+    rgba(255, 255, 255, 0) 214deg 235deg,
+    rgba(255, 255, 255, 0.31) 235deg 241deg,
+    rgba(255, 255, 255, 0) 241deg 262deg,
+    rgba(255, 255, 255, 0.25) 262deg 277deg,
+    rgba(255, 255, 255, 0) 277deg 296deg,
+    rgba(255, 255, 255, 0.34) 296deg 303deg,
+    rgba(255, 255, 255, 0) 303deg 324deg,
+    rgba(255, 255, 255, 0.27) 324deg 338deg,
+    rgba(255, 255, 255, 0) 338deg 360deg
+  );
+}
+
+@keyframes spinSunRays {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinSunRaysReverse {
+  from {
+    transform: rotate(360deg);
+  }
+
+  to {
+    transform: rotate(0deg);
+  }
+}
