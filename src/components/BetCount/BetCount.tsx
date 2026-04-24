@@ -12,18 +12,18 @@ const BetCount = () => {
   };
 
   return (
-    <div className="mx-auto mt-5">
-      <h3 className="textShadowSmallTitle text-[#54c3ee] text-[24px] stroke-black">
+    <div className="mx-auto mt-4 sm:mt-5">
+      <h3 className="textShadowSmallTitle text-[#54c3ee] text-[20px] sm:text-[24px] stroke-black text-center">
         Place a bid
       </h3>
 
-      <div className="flex items-center justify-center gap-7 mt-5">
+      <div className="flex items-center justify-center gap-3 sm:gap-7 mt-4 sm:mt-5">
         {/* Button Minus */}
         <div
-          className={`w-16 h-16 rounded-2xl transition-colors duration-800 ${minusPressed ? "bg-transparent" : "bg-gradient-to-b from-[#daf3a6] to-[#515895]"}`}
+          className={`w-13 h-13 sm:w-16 sm:h-16 rounded-2xl transition-colors duration-800 ${minusPressed ? "bg-transparent" : "bg-gradient-to-b from-[#daf3a6] to-[#515895]"}`}
         >
           <div
-            className={`w-full h-15 bg-white rounded-2xl border-2 border-[#341d1a]
+            className={`w-full h-12 sm:h-15 bg-white rounded-2xl border-2 border-[#341d1a]
             flex items-center justify-center cursor-pointer transition-transform duration-300
             ${minusPressed ? "translate-y-1 scale-95" : ""}`}
             onClick={() => {
@@ -46,9 +46,9 @@ const BetCount = () => {
           </div>
         </div>
         {/* Bet Count */}
-        <div className=" flex items-end w-47.5 h-15 bg-[#665D5C] rounded-2xl border-2 border-[#341d1a]">
-          <div className="mb-0 w-full flex items-center justify-center h-12.5 bg-[#887c7b] rounded-2xl border-t-2 border-[#341d1a]">
-            <div className="w-6 h-6  flex items-center justify-center rounded-full bg-[#F7405E] mr-2 border-4 border-[#341d1a] boxShadow">
+        <div className=" flex items-end w-[11.5rem] sm:w-47.5 h-12 sm:h-15 bg-[#665D5C] rounded-2xl border-2 border-[#341d1a]">
+          <div className="mb-0 w-full flex items-center justify-center h-10 sm:h-12.5 bg-[#887c7b] rounded-2xl border-t-2 border-[#341d1a]">
+            <div className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center rounded-full bg-[#F7405E] mr-1 sm:mr-2 border-3 sm:border-4 border-[#341d1a] boxShadow">
               <svg
                 width="7"
                 height="8"
@@ -80,17 +80,17 @@ const BetCount = () => {
                 }
                 setInputValue("");
               }}
-              className="text-white text-[20px] font-bold textShadow bg-transparent border-none outline-none w-27 text-center"
+              className="text-white text-[17px] sm:text-[20px] font-bold textShadow bg-transparent border-none outline-none w-20 sm:w-27 text-center"
             />
           </div>
         </div>
 
         {/* Button Plus */}
         <div
-          className={`w-16 h-16 rounded-2xl transition-colors duration-800 ${plusPressed ? "bg-transparent" : "bg-gradient-to-b from-[#daf3a6] to-[#515895]"}`}
+          className={`w-13 h-13 sm:w-16 sm:h-16 rounded-2xl transition-colors duration-800 ${plusPressed ? "bg-transparent" : "bg-gradient-to-b from-[#daf3a6] to-[#515895]"}`}
         >
           <div
-            className={`w-full h-15 bg-white rounded-2xl border-2 border-[#341d1a]
+            className={`w-full h-12 sm:h-15 bg-white rounded-2xl border-2 border-[#341d1a]
             flex items-center justify-center cursor-pointer transition-transform duration-300
             ${plusPressed ? "translate-y-1 scale-95" : ""}`}
             onClick={() => {

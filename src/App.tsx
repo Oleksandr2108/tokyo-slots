@@ -53,12 +53,16 @@ function App() {
           <SunPopup isWin={isWinResult} />
         </div>
       )}
-      <FloatIcon />
+      <div className="hidden sm:block">
+        <FloatIcon />
+      </div>
       <Header />
-      <Slots />
-      <BetCount />
-      <SpinButton />
-      <Footer />
+      <div className="px-5 sm:px-0">
+        <Slots />
+        <BetCount />
+        <SpinButton />
+        <Footer />
+      </div>
     </div>
   );
 }

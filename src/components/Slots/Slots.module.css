@@ -34,8 +34,8 @@
 }
 
 .reelIcon {
-  width: 62px;
-  height: 62px;
+  width: clamp(34px, 9vw, 62px);
+  height: clamp(34px, 9vw, 62px);
   object-fit: contain;
 }
 
