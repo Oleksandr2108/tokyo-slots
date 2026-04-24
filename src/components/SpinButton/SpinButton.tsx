@@ -3,11 +3,20 @@ import btnTop from "../../assets/btnTop.png";
 import btnAside from "../../assets/btnAside.png";
 import btnBottom from "../../assets/btnBottom.png";
 import { useGameStore } from "../../store/useGameStore";
+import { useSound } from "../../hooks/useSound";
+import startGameSound from "../../assets/sound/startGame.mp3";
 
 const SpinButton = () => {
   const isSpinning = useGameStore((state) => state.isSpinning);
+  const showResult = useGameStore((state) => state.showResult);
+  const betCount = useGameStore((state) => state.betCount);
+  const balance = useGameStore((state) => state.balance);
   const startGame = useGameStore((state) => state.startGame);
   const stopGame = useGameStore((state) => state.stopGame);
+  const { play: playStartGameSound, stop: stopStartGameSound } = useSound(
+    startGameSound,
+    { volume: 0.5 },
+  );
 
   useEffect(() => {
     return () => {
@@ -15,10 +24,25 @@ const SpinButton = () => {
     };
   }, [stopGame]);
 
+  useEffect(() => {
+    if (showResult) {
+      stopStartGameSound();
+    }
+  }, [showResult, stopStartGameSound]);
+
+  const handleStartGame = () => {
+    if (isSpinning || betCount === 0 || balance <= 0) {
+      return;
+    }
+
+    playStartGameSound();
+    startGame();
+  };
+
   return (
     <div
       className="relative w-60 h-40 mx-auto mt-18 cursor-pointer"
-      onClick={startGame}
+      onClick={handleStartGame}
     >
       <div className="absolute top-5 left-1/2 -translate-x-1/2 w-full h-full flex items-center justify-center z-10">
         <div className="relative w-full h-full">

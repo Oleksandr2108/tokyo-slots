@@ -37,6 +37,7 @@ export interface GameState {
   setBalance: (amount: number) => void;
   increaseBet: () => void;
   decreaseBet: () => void;
+  setBet: (amount: number) => void;
   startGame: () => void;
   stopGame: () => void;
   closeResult: () => void;

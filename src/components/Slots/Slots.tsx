@@ -3,6 +3,8 @@ import MainImg from "../../assets/slots.png";
 import Stick from "../../assets/stick.png";
 import Ball from "../../assets/ball.png";
 import { reelIcons, useGameStore } from "../../store/useGameStore";
+import { useSound } from "../../hooks/useSound";
+import startGameSound from "../../assets/sound/startGame.mp3";
 
 import style from "./Slots.module.css";
 
@@ -12,17 +14,39 @@ const iconById = Object.fromEntries(
 
 const Slots = () => {
   const leverState = useGameStore((state) => state.leverState);
-  console.log("leverState", leverState);
+  const isSpinning = useGameStore((state) => state.isSpinning);
+  const showResult = useGameStore((state) => state.showResult);
+  const betCount = useGameStore((state) => state.betCount);
+  const balance = useGameStore((state) => state.balance);
   const reels = useGameStore((state) => state.reels);
   const spinning = useGameStore((state) => state.spinning);
   const startGame = useGameStore((state) => state.startGame);
   const stopGame = useGameStore((state) => state.stopGame);
+  const { play: playStartGameSound, stop: stopStartGameSound } = useSound(
+    startGameSound,
+    { volume: 0.5 },
+  );
 
   useEffect(() => {
     return () => {
       stopGame();
     };
   }, [stopGame]);
+
+  useEffect(() => {
+    if (showResult) {
+      stopStartGameSound();
+    }
+  }, [showResult, stopStartGameSound]);
+
+  const handleStartGame = () => {
+    if (isSpinning || betCount === 0 || balance <= 0) {
+      return;
+    }
+
+    playStartGameSound();
+    startGame();
+  };
 
   return (
     <div className="relative w-125 mx-auto mt-18">
@@ -33,24 +57,23 @@ const Slots = () => {
       />
       <div className="absolute top-0 left-13 h-full flex items-center justify-center pointer-events-none gap-4">
         {reels.map((iconId, index) => (
-          
           <div
             key={index}
             className="w-20 h-35 rounded-2xl border-2 border-[#341d1a] bg-white flex items-center flex-col justify-center overflow-hidden"
           >
-            <div className="bg-[#E2E2E2] w-full h-8 flex-1 z-50" />
+            <div className="bg-[#E2E2E2] w-full h-8 flex-1 z-50 border-t-4 border-[#ffce92b8]" />
             <img
               src={iconById[iconId]}
               alt="slot icon"
               className={`${style.reelIcon} ${spinning[index] ? style.reelIconSpin : ""}`}
             />
-            <div className="bg-[#E2E2E2] w-full h-8 flex-1 z-50"/>
+            <div className="bg-[#E2E2E2] w-full h-8 flex-1 z-50 border-b-4 border-[#3b3b3bb8]" />
           </div>
         ))}
       </div>
       <div
         className="absolute top-[35%] right-3 translate-x-[50%] -translate-y-[50%] cursor-pointer"
-        onClick={startGame}
+        onClick={handleStartGame}
       >
         <div className={`${style.stick} ${style[leverState]}`}>
           {" "}

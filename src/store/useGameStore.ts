@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import {
   LEVER_RESET_TIME,
   REEL_COUNT,
@@ -26,7 +27,9 @@ const clearAllTimers = () => {
   intervalIds = [];
 };
 
-export const useGameStore = create<GameState>((set, get) => ({
+export const useGameStore = create<GameState>()(
+  persist(
+    (set, get) => ({
   leverState: "down",
   reels: createDefaultReels(),
   spinning: createDefaultSpinning(),
@@ -52,17 +55,27 @@ export const useGameStore = create<GameState>((set, get) => ({
     set((state) => ({
       betCount: state.betCount > 10 ? state.betCount - 10 : 0,
     })),
+  setBet: (amount: number) =>
+    set((state) => ({
+      betCount:
+        amount >= state.balance ? state.balance : amount < 10 ? 10 : amount,
+    })),
 
   startGame: () => {
     if (get().isSpinning) {
       return;
     }
-    if (get().betCount === 0) {
+    if (get().betCount === 0 || get().balance <= 0) {
       return;
     }
 
-    const currentBet = get().betCount;
-    const newBalance = get().balance - currentBet;
+    const balance = get().balance;
+    const clampedBet = get().betCount > balance ? balance : get().betCount;
+    if (clampedBet !== get().betCount) {
+      set({ betCount: clampedBet });
+    }
+    const currentBet = clampedBet;
+    const newBalance = balance - currentBet;
     set({ balance: newBalance });
 
     clearAllTimers();
@@ -167,4 +180,10 @@ export const useGameStore = create<GameState>((set, get) => ({
   closeResult: () => {
     set({ showResult: false });
   },
-}));
+}),
+    {
+      name: "tokyo-slots-storage",
+      partialize: (state) => ({ balance: state.balance }),
+    }
+  )
+);

@@ -38,15 +38,38 @@ export const calculateWin = (reels: SlotIconId[], bet: number): WinResult => {
 
   let matchedIcon: SlotIconId | null = null;
   let matchCount = 0;
+  let totalWin = 0;
+  let topSymbolWin = 0;
 
   (Object.keys(counts) as SlotIconId[]).forEach((iconId) => {
     if (counts[iconId] > matchCount) {
       matchCount = counts[iconId];
+    }
+
+    const currentCount = counts[iconId];
+    if (currentCount < 2) {
+      return;
+    }
+
+    const payout = PAYTABLE[iconId];
+    const multiplier =
+      currentCount >= 4
+        ? payout.four
+        : currentCount === 3
+          ? payout.three
+          : payout.two;
+
+    const symbolWin = toMoney(bet * multiplier);
+    totalWin = toMoney(totalWin + symbolWin);
+
+    if (symbolWin > topSymbolWin) {
+      topSymbolWin = symbolWin;
       matchedIcon = iconId;
+      matchCount = currentCount;
     }
   });
 
-  if (matchedIcon === null || matchCount < 2) {
+  if (totalWin <= 0) {
     return {
       winAmount: 0,
       isJackpot: false,
@@ -55,18 +78,9 @@ export const calculateWin = (reels: SlotIconId[], bet: number): WinResult => {
     };
   }
 
-  const payout: { two: number; three: number; four: number } =
-    PAYTABLE[matchedIcon as SlotIconId];
-  const multiplier =
-    matchCount >= 4
-      ? payout.four
-      : matchCount === 3
-        ? payout.three
-        : payout.two;
-
   return {
-    winAmount: toMoney(bet * multiplier),
-    isJackpot: matchedIcon === "seven" && matchCount >= 4,
+    winAmount: totalWin,
+    isJackpot: counts.seven >= 4,
     matchedIcon,
     matchCount,
   };

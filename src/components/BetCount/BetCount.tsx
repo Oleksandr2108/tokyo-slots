@@ -4,7 +4,8 @@ import { useGameStore } from "../../store/useGameStore";
 const BetCount = () => {
   const [minusPressed, setMinusPressed] = useState(false);
   const [plusPressed, setPlusPressed] = useState(false);
-  const { betCount, increaseBet, decreaseBet } = useGameStore();
+  const [inputValue, setInputValue] = useState("");
+  const { betCount, increaseBet, decreaseBet, setBet } = useGameStore();
   const handlePress = (setter: (v: boolean) => void) => {
     setter(true);
     setTimeout(() => setter(false), 300);
@@ -61,9 +62,26 @@ const BetCount = () => {
                 />
               </svg>
             </div>
-            <p className="text-white text-[20px] font-bold textShadow">
-              {betCount.toFixed(2)}
-            </p>
+            <input
+              type="text"
+              inputMode="numeric"
+              value={inputValue !== "" ? inputValue : betCount.toFixed(2)}
+              onFocus={() => setInputValue(String(betCount))}
+              onChange={(e) => {
+                const raw = e.target.value
+                  .replace(/[^0-9.]/g, "")
+                  .replace(/(\..*)\./g, "$1");
+                setInputValue(raw);
+              }}
+              onBlur={() => {
+                const parsed = Number(inputValue);
+                if (!Number.isNaN(parsed) && inputValue !== "") {
+                  setBet(parsed);
+                }
+                setInputValue("");
+              }}
+              className="text-white text-[20px] font-bold textShadow bg-transparent border-none outline-none w-27 text-center"
+            />
           </div>
         </div>
 
