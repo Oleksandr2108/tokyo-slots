@@ -4,6 +4,7 @@ import PopapWinBg from "../../assets/popapWin.svg";
 import PopapLoseBg from "../../assets/popapLose.svg";
 
 import { parseBalanceParts } from "../../utils/parseBalanceParts";
+import { useGameStore } from "../../store/useGameStore";
 
 interface SunPopupProps {
   isWin: boolean;
@@ -16,7 +17,10 @@ function SunPopup({ isWin }: SunPopupProps) {
       document.body.style.overflow = "";
     };
   }, []);
-  const balanceFromStore: string | number = "99 999.99";
+  const lastWinAmount = useGameStore((state) => state.lastWinAmount);
+  const betCount = useGameStore((state) => state.betCount);
+  const amountToShow = isWin ? lastWinAmount : betCount;
+  const balanceFromStore: string | number = amountToShow.toFixed(2);
   const { wholePart, fractionPart, separator } =
     parseBalanceParts(balanceFromStore);
   return (

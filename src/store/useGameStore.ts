@@ -1,64 +1,20 @@
 import { create } from "zustand";
+import {
+  LEVER_RESET_TIME,
+  REEL_COUNT,
+  RESULT_POPUP_HIDE_DELAY,
+  RESULT_SETTLE_DELAY,
+  SPIN_DURATION,
+  STEP_DELAY,
+  TICK_SPEED,
+  createDefaultReels,
+  createDefaultSpinning,
+  reelIcons,
+} from "./gameConfig";
+import type { GameState } from "./gameTypes";
+import { calculateWin, toMoney } from "./gameWinLogic";
 
-import CentIcon from "../assets/floatIcons/cent.svg";
-import CheryslotIcon from "../assets/floatIcons/cheryslot.svg";
-import CrownIcon from "../assets/floatIcons/Crown.svg";
-import DiamantIcon from "../assets/floatIcons/diamant.svg";
-import LemonIcon from "../assets/floatIcons/lemon.svg";
-import SevenIcon from "../assets/floatIcons/seven.svg";
-import SmileCentIcon from "../assets/floatIcons/smileCent.svg";
-
-type LeverState = "down" | "up";
-export type SlotIconId =
-  | "cent"
-  | "cheryslot"
-  | "crown"
-  | "diamant"
-  | "lemon"
-  | "seven"
-  | "smileCent";
-
-export interface SlotIcon {
-  id: SlotIconId;
-  src: string;
-}
-
-interface GameState {
-  leverState: LeverState;
-  reels: SlotIconId[];
-  spinning: boolean[];
-  isSpinning: boolean;
-  betCount: number;
-  balance: number;
-  setBalance: (amount: number) => void;
-
-  increaseBet: () => void;
-  decreaseBet: () => void;
-  startGame: () => void;
-  stopGame: () => void;
-}
-
-export const reelIcons: SlotIcon[] = [
-  { id: "cent", src: CentIcon },
-  { id: "cheryslot", src: CheryslotIcon },
-  { id: "crown", src: CrownIcon },
-  { id: "diamant", src: DiamantIcon },
-  { id: "lemon", src: LemonIcon },
-  { id: "seven", src: SevenIcon },
-  { id: "smileCent", src: SmileCentIcon },
-];
-
-const REEL_COUNT = 4;
-const STEP_DELAY = 500;
-const TICK_SPEED = 120;
-const SPIN_DURATION = 1900;
-const LEVER_RESET_TIME = 1000;
-
-const createDefaultReels = () =>
-  Array.from({ length: REEL_COUNT }, () => "seven" as SlotIconId);
-
-const createDefaultSpinning = () =>
-  Array.from({ length: REEL_COUNT }, () => false);
+export { reelIcons };
 
 let timeoutIds: number[] = [];
 let intervalIds: number[] = [];
@@ -75,7 +31,13 @@ export const useGameStore = create<GameState>((set, get) => ({
   reels: createDefaultReels(),
   spinning: createDefaultSpinning(),
   isSpinning: false,
-  betCount: 0,
+  showResult: false,
+  isWinResult: false,
+  lastWinAmount: 0,
+  isJackpot: false,
+  lastMatchedIcon: null,
+  lastMatchCount: 0,
+  betCount: 10,
   balance: 99999.99,
   setBalance: (amount: number) =>
     set(() => ({
@@ -98,7 +60,9 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (get().betCount === 0) {
       return;
     }
-    const newBalance = get().balance - get().betCount;
+
+    const currentBet = get().betCount;
+    const newBalance = get().balance - currentBet;
     set({ balance: newBalance });
 
     clearAllTimers();
@@ -107,6 +71,12 @@ export const useGameStore = create<GameState>((set, get) => ({
       leverState: "up",
       isSpinning: true,
       spinning: createDefaultSpinning(),
+      showResult: false,
+      isWinResult: false,
+      isJackpot: false,
+      lastWinAmount: 0,
+      lastMatchedIcon: null,
+      lastMatchCount: 0,
     });
 
     const resetLeverTimeout = window.setTimeout(() => {
@@ -162,8 +132,25 @@ export const useGameStore = create<GameState>((set, get) => ({
     }
 
     const finishTimeout = window.setTimeout(() => {
-      set({ isSpinning: false });
-    }, maxFinish);
+      const result = calculateWin(get().reels, currentBet);
+
+      set((state) => ({
+        isSpinning: false,
+        showResult: true,
+        isWinResult: result.winAmount > 0,
+        balance: toMoney(state.balance + result.winAmount),
+        lastWinAmount: result.winAmount,
+        isJackpot: result.isJackpot,
+        lastMatchedIcon: result.matchedIcon,
+        lastMatchCount: result.matchCount,
+      }));
+
+      const hideResultTimeout = window.setTimeout(() => {
+        set({ showResult: false });
+      }, RESULT_POPUP_HIDE_DELAY);
+
+      timeoutIds.push(hideResultTimeout);
+    }, maxFinish + RESULT_SETTLE_DELAY);
 
     timeoutIds.push(finishTimeout);
   },
@@ -173,6 +160,11 @@ export const useGameStore = create<GameState>((set, get) => ({
     set({
       isSpinning: false,
       spinning: createDefaultSpinning(),
+      showResult: false,
     });
+  },
+
+  closeResult: () => {
+    set({ showResult: false });
   },
 }));
