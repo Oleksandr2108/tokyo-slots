@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useShallow } from "zustand/shallow";
 import BetCount from "./components/BetCount/BetCount";
 import FloatIcon from "./components/FloatIcon/FloatIcon";
 import Footer from "./components/Footer/Footer";
@@ -13,12 +14,16 @@ import loseSound from "./assets/sound/lose.mp3";
 import jackpotSound from "./assets/sound/jackpot.mp3";
 
 function App() {
-  const showResult = useGameStore((state) => state.showResult);
-  const isWinResult = useGameStore((state) => state.isWinResult);
-  const isJackpot = useGameStore((state) => state.isJackpot);
-  const closeResult = useGameStore((state) => state.closeResult);
-  const { play: playWinSound } = useSound(winSound, { volume: 0.5 });
-  const { play: playLoseSound } = useSound(loseSound, { volume: 0.5 });
+  const { showResult, isWinResult, isJackpot, closeResult } = useGameStore(
+    useShallow((state) => ({
+      showResult: state.showResult,
+      isWinResult: state.isWinResult,
+      isJackpot: state.isJackpot,
+      closeResult: state.closeResult,
+    })),
+  );
+  const { play: playWinSound } = useSound(winSound, { volume: 1 });
+  const { play: playLoseSound } = useSound(loseSound, { volume: 1 });
   const { play: playJackpotSound } = useSound(jackpotSound, { volume: 0.6 });
 
   useEffect(() => {

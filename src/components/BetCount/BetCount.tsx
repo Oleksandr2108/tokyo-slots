@@ -1,4 +1,6 @@
 import { useState } from "react";
+import type { ChangeEvent } from "react";
+import { formatNumber } from "../../utils/formatNumber";
 import { useGameStore } from "../../store/useGameStore";
 
 const BetCount = () => {
@@ -9,6 +11,21 @@ const BetCount = () => {
   const handlePress = (setter: (v: boolean) => void) => {
     setter(true);
     setTimeout(() => setter(false), 300);
+  };
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const raw = event.target.value
+      .replace(/[^0-9.]/g, "")
+      .replace(/(\..*)\./g, "$1");
+    setInputValue(raw);
+  };
+
+  const handleInputBlur = () => {
+    const parsed = Number(inputValue);
+    if (!Number.isNaN(parsed) && inputValue !== "") {
+      setBet(Number(formatNumber(parsed)));
+    }
+    setInputValue("");
   };
 
   return (
@@ -64,22 +81,11 @@ const BetCount = () => {
             </div>
             <input
               type="text"
-              inputMode="numeric"
-              value={inputValue !== "" ? inputValue : betCount.toFixed(2)}
-              onFocus={() => setInputValue(String(betCount))}
-              onChange={(e) => {
-                const raw = e.target.value
-                  .replace(/[^0-9.]/g, "")
-                  .replace(/(\..*)\./g, "$1");
-                setInputValue(raw);
-              }}
-              onBlur={() => {
-                const parsed = Number(inputValue);
-                if (!Number.isNaN(parsed) && inputValue !== "") {
-                  setBet(parsed);
-                }
-                setInputValue("");
-              }}
+              inputMode="decimal"
+              value={inputValue !== "" ? inputValue : formatNumber(betCount)}
+              onFocus={() => setInputValue(formatNumber(betCount))}
+              onChange={handleInputChange}
+              onBlur={handleInputBlur}
               className="text-white text-[17px] sm:text-[20px] font-bold textShadow bg-transparent border-none outline-none w-20 sm:w-27 text-center"
             />
           </div>

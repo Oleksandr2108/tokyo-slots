@@ -1,4 +1,3 @@
-"use client";
 import HeaderTitle from "../../assets/headerTitle.png";
 import style from "./Header.module.css";
 const Header = () => {

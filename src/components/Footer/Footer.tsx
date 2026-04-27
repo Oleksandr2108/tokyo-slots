@@ -2,11 +2,12 @@ import City from "../../assets/city.png";
 import Cloud from "../../assets/cloud.png";
 import BalanceBg from "../../assets/BalanceBg.png";
 import { parseBalanceParts } from "../../utils/parseBalanceParts";
+import { formatNumber } from "../../utils/formatNumber";
 import { useGameStore } from "../../store/useGameStore";
 
 const Footer = () => {
-  const { balance } = useGameStore();
-  const balanceFromStore: string | number = balance.toFixed(2);
+  const balance = useGameStore((state) => state.balance);
+  const balanceFromStore: string | number = formatNumber(balance);
   const { wholePart, fractionPart, separator } =
     parseBalanceParts(balanceFromStore);
 

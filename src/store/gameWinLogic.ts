@@ -8,13 +8,13 @@ const PAYTABLE: Record<
     four: number;
   }
 > = {
-  seven: { two: 2, three: 12, four: 50 },
-  crown: { two: 1.8, three: 8, four: 20 },
-  diamant: { two: 1.6, three: 6, four: 15 },
-  cheryslot: { two: 1.4, three: 5, four: 12 },
-  lemon: { two: 1.3, three: 4, four: 10 },
-  cent: { two: 1.2, three: 3, four: 8 },
-  smileCent: { two: 1.2, three: 3, four: 8 },
+  seven: { two: 1, three: 12, four: 50 },
+  crown: { two: 0.9, three: 8, four: 20 },
+  diamant: { two: 0.8, three: 6, four: 15 },
+  cheryslot: { two: 0.7, three: 5, four: 12 },
+  lemon: { two: 0.65, three: 4, four: 10 },
+  cent: { two: 0.6, three: 3, four: 8 },
+  smileCent: { two: 0.6, three: 3, four: 8 },
 };
 
 export const toMoney = (value: number) => Math.round(value * 100) / 100;

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useShallow } from "zustand/shallow";
 import btnTop from "../../assets/btnTop.png";
 import btnAside from "../../assets/btnAside.png";
 import btnBottom from "../../assets/btnBottom.png";
@@ -7,12 +8,17 @@ import { useSound } from "../../hooks/useSound";
 import startGameSound from "../../assets/sound/startGame.mp3";
 
 const SpinButton = () => {
-  const isSpinning = useGameStore((state) => state.isSpinning);
-  const showResult = useGameStore((state) => state.showResult);
-  const betCount = useGameStore((state) => state.betCount);
-  const balance = useGameStore((state) => state.balance);
-  const startGame = useGameStore((state) => state.startGame);
-  const stopGame = useGameStore((state) => state.stopGame);
+  const { isSpinning, showResult, betCount, balance, startGame, stopGame } =
+    useGameStore(
+      useShallow((state) => ({
+        isSpinning: state.isSpinning,
+        showResult: state.showResult,
+        betCount: state.betCount,
+        balance: state.balance,
+        startGame: state.startGame,
+        stopGame: state.stopGame,
+      })),
+    );
   const { play: playStartGameSound, stop: stopStartGameSound } = useSound(
     startGameSound,
     { volume: 0.5 },
