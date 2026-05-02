@@ -1,0 +1,44 @@
+.wavyBlock {
+  position: relative;
+  background: #fff6de;
+  color: #fff;
+  padding: 60px 32px 0;
+  text-align: center;
+}
+
+.wavyBlock h2 {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.wavyBlock p {
+  font-size: 16px;
+  opacity: 0.85;
+  margin-bottom: 32px;
+}
+
+.waveWrapper {
+  overflow: hidden;
+  height: 25px;
+  transform: rotateX(180deg);
+}
+
+.waveBorder {
+  display: block;
+  width: 190%;
+  height: 25px;
+  animation: wave-move 100s linear infinite;
+}
+.strokeText {
+  color: #A5DFF7;
+  
+  -webkit-text-stroke: 3px #341D1A;
+}
+@keyframes wave-move {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}

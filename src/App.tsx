@@ -1,121 +1,116 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useCallback, useEffect } from "react";
+import { useShallow } from "zustand/shallow";
+import BetCount from "./components/BetCount/BetCount";
+import FloatIcon from "./components/FloatIcon/FloatIcon";
+import Footer from "./components/Footer/Footer";
+import Header from "./components/Header/Header";
+import Slots from "./components/Slots/Slots";
+import SpinButton from "./components/SpinButton/SpinButton";
+import SunPopup from "./components/SunPopup/SunPopup";
+import { useGameStore } from "./store/useGameStore";
+import { useSound } from "./hooks/useSound";
+import startGameSound from "./assets/sound/startGame.mp3";
+import winSound from "./assets/sound/win.mp3";
+import loseSound from "./assets/sound/lose.mp3";
+import jackpotSound from "./assets/sound/jackpot.mp3";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const {
+    showResult,
+    isWinResult,
+    isJackpot,
+    closeResult,
+    isSpinning,
+    betCount,
+    balance,
+    startGame,
+    stopGame,
+  } = useGameStore(
+    useShallow((state) => ({
+      showResult: state.showResult,
+      isWinResult: state.isWinResult,
+      isJackpot: state.isJackpot,
+      closeResult: state.closeResult,
+      isSpinning: state.isSpinning,
+      betCount: state.betCount,
+      balance: state.balance,
+      startGame: state.startGame,
+      stopGame: state.stopGame,
+    })),
+  );
+  const { play: playStartGameSound, stop: stopStartGameSound } = useSound(
+    startGameSound,
+    { volume: 0.5 },
+  );
+  const { play: playWinSound } = useSound(winSound, { volume: 1 });
+  const { play: playLoseSound } = useSound(loseSound, { volume: 1 });
+  const { play: playJackpotSound } = useSound(jackpotSound, { volume: 0.6 });
+
+  useEffect(() => {
+    return () => {
+      stopGame();
+    };
+  }, [stopGame]);
+
+  useEffect(() => {
+    if (showResult) {
+      stopStartGameSound();
+    }
+  }, [showResult, stopStartGameSound]);
+
+  const handleStartGame = useCallback(() => {
+    if (isSpinning || betCount === 0 || balance <= 0) {
+      return;
+    }
+
+    playStartGameSound();
+    startGame();
+  }, [balance, betCount, isSpinning, playStartGameSound, startGame]);
+
+  useEffect(() => {
+    if (!showResult) {
+      return;
+    }
+
+    if (isJackpot) {
+      playJackpotSound();
+      return;
+    }
+
+    if (isWinResult) {
+      playWinSound();
+      return;
+    }
+
+    playLoseSound();
+  }, [
+    isJackpot,
+    isWinResult,
+    playJackpotSound,
+    playLoseSound,
+    playWinSound,
+    showResult,
+  ]);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="min-h-screen relative overflow-hidden pb-40">
+      {showResult && (
+        <div onClick={closeResult}>
+          <SunPopup isWin={isWinResult} />
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      )}
+      <div className="hidden sm:block">
+        <FloatIcon />
+      </div>
+      <Header />
+      <div className="px-5 sm:px-0">
+        <Slots onStartGame={handleStartGame} />
+        <BetCount />
+        <SpinButton onStartGame={handleStartGame} />
+        <Footer />
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;

@@ -1,0 +1,56 @@
+.stick {
+  position: relative;
+  width: 9px;
+  height: 81px;
+
+  transform-origin: bottom center;
+  transition: transform 1s ease;
+}
+
+.down {
+  transform: scaleY(1);
+}
+
+.up {
+  transform: scaleY(-1);
+}
+
+.ball {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  transform: translate(-50%, -50%);
+  transition: all 1s ease;
+}
+
+.ball.down {
+  top: calc(100% - 81px);
+  left: 50%;
+}
+
+.ball.up {
+  top: calc(100% + 81px);
+  left: 50%;
+}
+
+.reelIcon {
+  width: clamp(34px, 9vw, 62px);
+  height: clamp(34px, 9vw, 62px);
+  object-fit: contain;
+}
+
+.reelIconSpin {
+  animation: reelSpin 0.25s linear infinite;
+}
+
+@keyframes reelSpin {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0.15;
+  }
+
+  100% {
+    transform: translateY(100%);
+    opacity: 1;
+  }
+}
