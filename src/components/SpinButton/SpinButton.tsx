@@ -1,55 +1,25 @@
-import { useEffect } from "react";
 import { useShallow } from "zustand/shallow";
 import btnTop from "../../assets/btnTop.png";
 import btnAside from "../../assets/btnAside.png";
 import btnBottom from "../../assets/btnBottom.png";
 import { useGameStore } from "../../store/useGameStore";
-import { useSound } from "../../hooks/useSound";
-import startGameSound from "../../assets/sound/startGame.mp3";
 
-const SpinButton = () => {
-  const { isSpinning, showResult, betCount, balance, startGame, stopGame } =
-    useGameStore(
-      useShallow((state) => ({
-        isSpinning: state.isSpinning,
-        showResult: state.showResult,
-        betCount: state.betCount,
-        balance: state.balance,
-        startGame: state.startGame,
-        stopGame: state.stopGame,
-      })),
-    );
-  const { play: playStartGameSound, stop: stopStartGameSound } = useSound(
-    startGameSound,
-    { volume: 0.5 },
+interface SpinButtonProps {
+  onStartGame: () => void;
+}
+
+const SpinButton = ({ onStartGame }: SpinButtonProps) => {
+  const { isSpinning } = useGameStore(
+    useShallow((state) => ({
+      isSpinning: state.isSpinning,
+    })),
   );
-
-  useEffect(() => {
-    return () => {
-      stopGame();
-    };
-  }, [stopGame]);
-
-  useEffect(() => {
-    if (showResult) {
-      stopStartGameSound();
-    }
-  }, [showResult, stopStartGameSound]);
-
-  const handleStartGame = () => {
-    if (isSpinning || betCount === 0 || balance <= 0) {
-      return;
-    }
-
-    playStartGameSound();
-    startGame();
-  };
 
   return (
     <div
       className="relative w-60 h-40 mx-auto mt-18 cursor-pointer select-none touch-manipulation"
       style={{ WebkitTapHighlightColor: "transparent" }}
-      onClick={handleStartGame}
+      onClick={onStartGame}
     >
       <div className="absolute top-5 left-1/2 -translate-x-1/2 w-full h-full flex items-center justify-center z-10">
         <div className="relative w-full h-full">

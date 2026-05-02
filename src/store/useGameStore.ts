@@ -19,6 +19,15 @@ export { reelIcons };
 
 let timeoutIds: number[] = [];
 let intervalIds: number[] = [];
+const INITIAL_BALANCE = 99999.99;
+
+const sanitizeBalance = (value: unknown): number => {
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0) {
+    return INITIAL_BALANCE;
+  }
+
+  return toMoney(value);
+};
 
 const clearAllTimers = () => {
   timeoutIds.forEach((id) => window.clearTimeout(id));
@@ -41,7 +50,7 @@ export const useGameStore = create<GameState>()(
       lastMatchedIcon: null,
       lastMatchCount: 0,
       betCount: 10,
-      balance: 99999.99,
+      balance: INITIAL_BALANCE,
       setBalance: (amount: number) =>
         set(() => ({
           balance: amount,
@@ -185,7 +194,7 @@ export const useGameStore = create<GameState>()(
     }),
     {
       name: "tokyo-slots-storage",
-      partialize: (state) => ({ balance: state.balance }),
+      partialize: (state) => ({ balance: sanitizeBalance(state.balance) }),
     },
   ),
 );
